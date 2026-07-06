@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#667eea">
+    <title>美味餐厅 - 在线点单</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; }
+        
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar-title { color: white; font-size: 20px; font-weight: bold; }
+        .cart-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .cart-badge {
+            background: #ff6b6b;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* 主内容区 */
+        .main-content { margin-top: 70px; padding: 20px; max-width: 400px; margin-left: auto; margin-right: auto; }
+
+        /* Banner */
+        .banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .banner h1 { font-size: 28px; margin-bottom: 10px; }
+        .banner p { opacity: 0.9; margin-bottom: 20px; }
+        .banner-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* 快捷入口 */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .action-icon { font-size: 32px; }
+        .action-text { font-size: 12px; color: #666; }
+
+        /* 卡片 */
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .card-title { font-size: 18px; font-weight: bold; color: #333; }
+        .card-more { font-size: 14px; color: #667eea; }
+
+        /* 热销商品 */
+        .hot-scroll {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        .hot-item {
+            flex-shrink: 0;
+            width: 120px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .hot-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+        .hot-name { font-size: 14px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .hot-price { font-size: 16px; font-weight: bold; color: #ff6b6b; }
+
+        /* 商品分类 */
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+        }
+        .category-tab {
+            flex-shrink: 0;
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .category-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* 商品列表 */
+        .menu-list { display: flex; flex-direction: column; gap: 15px; }
+        .menu-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            background: #fafafa;
+            border-radius: 12px;
+        }
+        .menu-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+        .menu-info { flex: 1; display: flex; flex-direction: column; }
+        .menu-name { font-size: 16px; font-weight: bold; color: #333; }
+        .menu-desc { font-size: 12px; color: #999; flex: 1; }
+        .menu-bottom { display: flex; justify-content: space-between; align-items: center; }
+        .menu-price { font-size: 18px; font-weight: bold; color: #ff6b6b; }
+        .menu-actions { display: flex; gap: 10px; }
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .btn-plus { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-minus { background: #e0e0e0; color: #666; }
+        .action-count { font-size: 14px; color: #666; min-width: 24px; text-align: center; }
+
+        /* 购物车弹窗 */
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            display: none;
+        }
+        .cart-modal.show { display: flex; justify-content: flex-end; }
+        .cart-panel {
+            background: white;
+            width: 85%;
+            max-width: 350px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .cart-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .close-btn { background: rgba(255,255,255,0.2); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; }
+        .cart-items { flex: 1; overflow-y: auto; padding: 20px; }
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .cart-image { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; }
+        .cart-info { flex: 1; display: flex; flex-direction: column; }
+        .cart-name { font-size: 15px; font-weight: bold; }
+        .cart-price { font-size: 16px; color: #ff6b6b; font-weight: bold; }
+        .cart-quantity { display: flex; gap: 10px; align-items: center; }
+        .cart-footer {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+        }
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .total-label { font-size: 16px; color: #666; }
+        .total-price { font-size: 24px; font-weight: bold; color: #ff6b6b; }
+        .checkout-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .empty-cart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        .empty-icon { font-size: 60px; margin-bottom: 15px; }
+
+        /* 下单成功提示 */
+        .success-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            z-index: 300;
+            display: none;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .success-modal.show { display: block; }
+        .success-icon { font-size: 60px; margin-bottom: 15px; }
+        .success-title { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 10px; }
+        .success-desc { font-size: 14px; color: #666; }
+
+        /* 适配电脑端 */
+        @media (min-width: 768px) {
+            .main-content { max-width: 600px; }
+            .quick-actions { grid-template-columns: repeat(4, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <div class="navbar">
+        <span class="navbar-title">🍔 美味餐厅</span>
+        <button class="cart-btn" onclick="showCart()">
+            🛒 购物车
+            <span class="cart-badge" id="cartCount">0</span>
+        </button>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <!-- Banner -->
+        <div class="banner">
+            <h1>在线点单</h1>
+            <p>美味送到家，优惠享不停</p>
+            <button class="banner-btn" onclick="scrollToMenu()">立即点单 →</button>
+        </div>
+
+        <!-- 快捷入口 -->
+        <div class="quick-actions">
+            <div class="action-item" onclick="scrollToMenu()">
+                <span class="action-icon">🍟</span>
+                <span class="action-text">美食点单</span>
+            </div>
+            <div class="action-item" onclick="showCart()">
+                <span class="action-icon">🛒</span>
+                <span class="action-text">购物车</span>
+            </div>
+            <div class="action-item">
+                <span class="action-icon">⭐</span>
+                <span class="action-text">我的收藏</span>
+            </div>
+            <div class="action-item">
+                <span class="action-icon">📞</span>
+                <span class="action-text">联系我们</span>
+            </div>
+        </div>
+
+        <!-- 热销推荐 -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">🔥 热销推荐</span>
+                <span class="card-more" onclick="scrollToMenu()">查看全部 →</span>
+            </div>
+            <div class="hot-scroll">
+                <div class="hot-item" onclick="scrollToMenu()">
+                    <img class="hot-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=delicious%20beef%20burger&image_size=square" alt="">
+                    <span class="hot-name">经典牛肉汉堡</span>
+                    <span class="hot-price">¥28</span>
+                </div>
+                <div class="hot-item" onclick="scrollToMenu()">
+                    <img class="hot-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=cheese%20burger&image_size=square" alt="">
+                    <span class="hot-name">芝士汉堡</span>
+                    <span class="hot-price">¥32</span>
+                </div>
+                <div class="hot-item" onclick="scrollToMenu()">
+                    <img class="hot-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=fast%20food%20combo%20meal&image_size=square" alt="">
+                    <span class="hot-name">超值套餐A</span>
+                    <span class="hot-price">¥45</span>
+                </div>
+                <div class="hot-item" onclick="scrollToMenu()">
+                    <img class="hot-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=crispy%20chicken%20nuggets&image_size=square" alt="">
+                    <span class="hot-name">炸鸡块</span>
+                    <span class="hot-price">¥18</span>
+                </div>
+                <div class="hot-item" onclick="scrollToMenu()">
+                    <img class="hot-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=milk%20tea%20with%20pearls&image_size=square" alt="">
+                    <span class="hot-name">奶茶</span>
+                    <span class="hot-price">¥15</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 今日特惠 -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">🎉 今日特惠</span>
+            </div>
+            <div style="background: linear-gradient(135deg, #fff8e1 0%, #ffe58f 100%); padding: 20px; border-radius: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <span style="background: rgba(255,255,255,0.8); padding: 4px 12px; border-radius: 8px; font-size: 12px; color: #8b5a00;">限时优惠</span>
+                        <p style="font-weight: bold; margin: 10px 0 5px;">超值套餐A</p>
+                        <p style="font-size: 12px; color: #666;">汉堡+薯条+可乐</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="font-size: 32px; font-weight: bold; color: #ff6b6b;">¥45</p>
+                        <p style="font-size: 14px; color: #999; text-decoration: line-through;">¥58</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 商品列表 -->
+        <div class="card" id="menuSection">
+            <div class="card-header">
+                <span class="card-title">📋 商品菜单</span>
+            </div>
+            <div class="category-tabs" id="categoryTabs">
+                <span class="category-tab active" data-category="all">全部</span>
+                <span class="category-tab" data-category="burger">汉堡</span>
+                <span class="category-tab" data-category="drink">饮品</span>
+                <span class="category-tab" data-category="snack">小吃</span>
+                <span class="category-tab" data-category="set">套餐</span>
+            </div>
+            <div class="menu-list" id="menuList">
+                <!-- 商品列表由JS动态生成 -->
+            </div>
+        </div>
+
+        <!-- 门店信息 -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">📍 门店信息</span>
+            </div>
+            <div style="padding-top: 10px;">
+                <p style="display: flex; align-items: center; gap: 10px; padding: 10px 0; font-size: 14px; color: #666;">
+                    📍 北京市朝阳区建国路88号
+                </p>
+                <p style="display: flex; align-items: center; gap: 10px; padding: 10px 0; font-size: 14px; color: #666;">
+                    ⏰ 营业时间：09:00 - 22:00
+                </p>
+                <p style="display: flex; align-items: center; gap: 10px; padding: 10px 0; font-size: 14px; color: #666;">
+                    📞 订餐热线：400-888-8888
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 购物车弹窗 -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-panel">
+            <div class="cart-header">
+                <span style="font-weight: bold; font-size: 18px;">🛒 购物车</span>
+                <button class="close-btn" onclick="hideCart()">×</button>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <div class="empty-cart">
+                    <span class="empty-icon">🛒</span>
+                    <p>购物车是空的</p>
+                </div>
+            </div>
+            <div class="cart-footer" id="cartFooter" style="display: none;">
+                <div class="cart-total">
+                    <span class="total-label">合计:</span>
+                    <span class="total-price" id="totalPrice">¥0.00</span>
+                </div>
+                <button class="checkout-btn" onclick="checkout()">结算</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 下单成功提示 -->
+    <div class="success-modal" id="successModal">
+        <span class="success-icon">✅</span>
+        <p class="success-title">下单成功！</p>
+        <p class="success-desc">感谢您的订单，我们会尽快为您准备</p>
+    </div>
+
+    <script>
+        // 商品数据
+        const menuItems = [
+            { id: 1, name: '经典牛肉汉堡', desc: '100%纯牛肉饼，新鲜蔬菜', price: 28.00, category: 'burger', image: 'delicious%20beef%20burger%20with%20lettuce' },
+            { id: 2, name: '芝士汉堡', desc: '香浓芝士，回味无穷', price: 32.00, category: 'burger', image: 'cheese%20burger%20with%20melted%20cheese' },
+            { id: 3, name: '鸡腿汉堡', desc: '酥脆鸡腿肉，外酥里嫩', price: 25.00, category: 'burger', image: 'crispy%20chicken%20leg%20burger' },
+            { id: 4, name: '可乐(中杯)', desc: '冰爽可口，畅饮无限', price: 8.00, category: 'drink', image: 'cold%20cola%20drink%20in%20cup' },
+            { id: 5, name: '雪碧(中杯)', desc: '清爽柠檬味，透心凉', price: 8.00, category: 'drink', image: 'sprite%20lemon%20lime%20soda' },
+            { id: 6, name: '奶茶(大杯)', desc: '香浓奶茶，丝滑口感', price: 15.00, category: 'drink', image: 'milk%20tea%20with%20pearls' },
+            { id: 7, name: '薯条(大份)', desc: '金黄酥脆，经典美味', price: 12.00, category: 'snack', image: 'golden%20crispy%20french%20fries' },
+            { id: 8, name: '炸鸡块', desc: '外酥里嫩，鲜香可口', price: 18.00, category: 'snack', image: 'crispy%20chicken%20nuggets' },
+            { id: 9, name: '蛋挞', desc: '香甜酥脆，葡式风味', price: 6.00, category: 'snack', image: 'portuguese%20egg%20tart' },
+            { id: 10, name: '超值套餐A', desc: '汉堡+薯条+可乐', price: 45.00, category: 'set', image: 'fast%20food%20combo%20meal' },
+            { id: 11, name: '家庭套餐', desc: '2汉堡+2薯条+2可乐', price: 88.00, category: 'set', image: 'family%20meal%20set' },
+            { id: 12, name: '儿童套餐', desc: '小汉堡+小薯条+果汁', price: 35.00, category: 'set', image: 'kids%20happy%20meal' }
+        ];
+
+        // 购物车数据
+        let cart = [];
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCart();
+            renderMenu('all');
+            updateCartUI();
+        });
+
+        // 加载购物车
+        function loadCart() {
+            const saved = localStorage.getItem('cart');
+            if (saved) {
+                cart = JSON.parse(saved);
+            }
+        }
+
+        // 保存购物车
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        // 渲染商品列表
+        function renderMenu(category) {
+            const menuList = document.getElementById('menuList');
+            const filtered = category === 'all' ? menuItems : menuItems.filter(item => item.category === category);
+            
+            menuList.innerHTML = filtered.map(item => {
+                const count = getCartCount(item.id);
+                return `
+                    <div class="menu-item">
+                        <img class="menu-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=${item.image}&image_size=square" alt="${item.name}">
+                        <div class="menu-info">
+                            <span class="menu-name">${item.name}</span>
+                            <span class="menu-desc">${item.desc}</span>
+                            <div class="menu-bottom">
+                                <span class="menu-price">¥${item.price.toFixed(2)}</span>
+                                <div class="menu-actions">
+                                    ${count > 0 ? `<button class="action-btn btn-minus" onclick="decreaseQty(${item.id})">-</button>` : ''}
+                                    ${count > 0 ? `<span class="action-count">${count}</span>` : ''}
+                                    <button class="action-btn btn-plus" onclick="addToCart(${item.id})">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 获取购物车数量
+        function getCartCount(itemId) {
+            const item = cart.find(c => c.id === itemId);
+            return item ? item.quantity : 0;
+        }
+
+        // 添加到购物车
+        function addToCart(itemId) {
+            const item = menuItems.find(i => i.id === itemId);
+            if (!item) return;
+
+            const existing = cart.find(c => c.id === itemId);
+            if (existing) {
+                existing.quantity++;
+            } else {
+                cart.push({ ...item, quantity: 1 });
+            }
+
+            saveCart();
+            updateCartUI();
+            renderMenu(getCurrentCategory());
+            vibrate(10);
+        }
+
+        // 减少数量
+        function decreaseQty(itemId) {
+            const existing = cart.find(c => c.id === itemId);
+            if (!existing) return;
+
+            if (existing.quantity > 1) {
+                existing.quantity--;
+            } else {
+                cart = cart.filter(c => c.id !== itemId);
+            }
+
+            saveCart();
+            updateCartUI();
+            renderMenu(getCurrentCategory());
+        }
+
+        // 获取当前分类
+        function getCurrentCategory() {
+            const activeTab = document.querySelector('.category-tab.active');
+            return activeTab ? activeTab.dataset.category : 'all';
+        }
+
+        // 更新购物车UI
+        function updateCartUI() {
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+            
+            // 更新购物车面板
+            renderCartPanel();
+        }
+
+        // 渲染购物车面板
+        function renderCartPanel() {
+            const cartItems = document.getElementById('cartItems');
+            const cartFooter = document.getElementById('cartFooter');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="empty-cart">
+                        <span class="empty-icon">🛒</span>
+                        <p>购物车是空的</p>
+                        <p style="font-size: 12px;">快去挑选美味吧</p>
+                    </div>
+                `;
+                cartFooter.style.display = 'none';
+                return;
+            }
+
+            cartFooter.style.display = 'block';
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <img class="cart-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=${item.image}&image_size=square" alt="${item.name}">
+                    <div class="cart-info">
+                        <span class="cart-name">${item.name}</span>
+                        <span class="cart-price">¥${item.price.toFixed(2)}</span>
+                        <div class="cart-quantity">
+                            <button class="action-btn btn-minus" onclick="decreaseQty(${item.id})">-</button>
+                            <span class="action-count">${item.quantity}</span>
+                            <button class="action-btn btn-plus" onclick="addToCart(${item.id})">+</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // 更新总价
+            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            document.getElementById('totalPrice').textContent = `¥${total.toFixed(2)}`;
+        }
+
+        // 显示购物车
+        function showCart() {
+            document.getElementById('cartModal').classList.add('show');
+            renderCartPanel();
+        }
+
+        // 隐藏购物车
+        function hideCart() {
+            document.getElementById('cartModal').classList.remove('show');
+        }
+
+        // 切换分类
+        document.getElementById('categoryTabs').addEventListener('click', function(e) {
+            if (e.target.classList.contains('category-tab')) {
+                document.querySelectorAll('.category-tab').forEach(tab => tab.classList.remove('active'));
+                e.target.classList.add('active');
+                renderMenu(e.target.dataset.category);
+            }
+        });
+
+        // 滚动到菜单
+        function scrollToMenu() {
+            document.getElementById('menuSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 结算
+        function checkout() {
+            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            
+            if (confirm(`确认订单？共${cart.length}件商品，合计¥${total.toFixed(2)}`)) {
+                // 清空购物车
+                cart = [];
+                saveCart();
+                updateCartUI();
+                renderMenu(getCurrentCategory());
+                hideCart();
+                
+                // 显示成功提示
+                const successModal = document.getElementById('successModal');
+                successModal.classList.add('show');
+                
+                setTimeout(() => {
+                    successModal.classList.remove('show');
+                }, 2000);
+            }
+        }
+
+        // 震动反馈
+        function vibrate(duration) {
+            if ('vibrate' in navigator) {
+                navigator.vibrate(duration);
+            }
+        }
+
+        // 点击遮罩关闭购物车
+        document.getElementById('cartModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideCart();
+            }
+        });
+    </script>
+</body>
+</html>

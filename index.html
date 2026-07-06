@@ -339,27 +339,27 @@
                 <div class="hot-item" onclick="scrollToMenu()">
                     <img class="hot-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=cosmetics%20makeup%20beauty%20products&image_size=square" alt="">
                     <span class="hot-name">化妆品</span>
-                    <span class="hot-price">¥99</span>
+                    <span class="hot-price">¥52</span>
                 </div>
                 <div class="hot-item" onclick="scrollToMenu()">
                     <img class="hot-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=movie%20cinema%20popcorn&image_size=square" alt="">
                     <span class="hot-name">看电影</span>
-                    <span class="hot-price">¥50</span>
+                    <span class="hot-price">¥52</span>
                 </div>
                 <div class="hot-item" onclick="scrollToMenu()">
                     <img class="hot-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=shopping%20street%20fashion&image_size=square" alt="">
                     <span class="hot-name">逛街</span>
-                    <span class="hot-price">¥200</span>
+                    <span class="hot-price">¥52</span>
                 </div>
                 <div class="hot-item" onclick="scrollToMenu()">
                     <img class="hot-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=video%20gaming%20console&image_size=square" alt="">
                     <span class="hot-name">打游戏</span>
-                    <span class="hot-price">¥88</span>
+                    <span class="hot-price">¥52</span>
                 </div>
                 <div class="hot-item" onclick="scrollToMenu()">
                     <img class="hot-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=beautiful%20cake%20dessert&image_size=square" alt="">
                     <span class="hot-name">小蛋糕</span>
-                    <span class="hot-price">¥38</span>
+                    <span class="hot-price">¥52</span>
                 </div>
             </div>
         </div>
@@ -374,11 +374,11 @@
                     <div>
                         <span style="background: rgba(255,255,255,0.8); padding: 4px 12px; border-radius: 8px; font-size: 12px; color: #8b5a00;">限时优惠</span>
                         <p style="font-weight: bold; margin: 10px 0 5px;">打视频电话一个小时</p>
-                        <p style="font-size: 12px; color: #666;">原价五十元</p>
+                        <p style="font-size: 12px; color: #666;">原价五十二元</p>
                     </div>
                     <div style="text-align: right;">
-                        <p style="font-size: 32px; font-weight: bold; color: #ff6b6b;">¥15</p>
-                        <p style="font-size: 14px; color: #999; text-decoration: line-through;">¥50</p>
+                        <p style="font-size: 32px; font-weight: bold; color: #ff6b6b;">¥5</p>
+                        <p style="font-size: 14px; color: #999; text-decoration: line-through;">¥52</p>
                     </div>
                 </div>
             </div>
@@ -391,9 +391,9 @@
             </div>
             <div class="category-tabs" id="categoryTabs">
                 <span class="category-tab active" data-category="all">全部</span>
-                <span class="category-tab" data-category="burger">汉堡</span>
-                <span class="category-tab" data-category="drink">饮品</span>
-                <span class="category-tab" data-category="snack">小吃</span>
+                <span class="category-tab" data-category="CALL">打视频</span>
+                <span class="category-tab" data-category="CALL">打电话</span>
+                <span class="category-tab" data-category="GAME">打游戏</span>
                 <span class="category-tab" data-category="set">套餐</span>
             </div>
             <div class="menu-list" id="menuList">
@@ -453,18 +453,18 @@
     <script>
         // 商品数据
         const menuItems = [
-            { id: 1, name: '经典牛肉汉堡', desc: '100%纯牛肉饼，新鲜蔬菜', price: 28.00, category: 'burger', image: 'delicious%20beef%20burger%20with%20lettuce' },
-            { id: 2, name: '芝士汉堡', desc: '香浓芝士，回味无穷', price: 32.00, category: 'burger', image: 'cheese%20burger%20with%20melted%20cheese' },
-            { id: 3, name: '鸡腿汉堡', desc: '酥脆鸡腿肉，外酥里嫩', price: 25.00, category: 'burger', image: 'crispy%20chicken%20leg%20burger' },
-            { id: 4, name: '可乐(中杯)', desc: '冰爽可口，畅饮无限', price: 8.00, category: 'drink', image: 'cold%20cola%20drink%20in%20cup' },
-            { id: 5, name: '雪碧(中杯)', desc: '清爽柠檬味，透心凉', price: 8.00, category: 'drink', image: 'sprite%20lemon%20lime%20soda' },
-            { id: 6, name: '奶茶(大杯)', desc: '香浓奶茶，丝滑口感', price: 15.00, category: 'drink', image: 'milk%20tea%20with%20pearls' },
-            { id: 7, name: '薯条(大份)', desc: '金黄酥脆，经典美味', price: 12.00, category: 'snack', image: 'golden%20crispy%20french%20fries' },
-            { id: 8, name: '炸鸡块', desc: '外酥里嫩，鲜香可口', price: 18.00, category: 'snack', image: 'crispy%20chicken%20nuggets' },
-            { id: 9, name: '蛋挞', desc: '香甜酥脆，葡式风味', price: 6.00, category: 'snack', image: 'portuguese%20egg%20tart' },
-            { id: 10, name: '超值套餐A', desc: '汉堡+薯条+可乐', price: 45.00, category: 'set', image: 'fast%20food%20combo%20meal' },
-            { id: 11, name: '家庭套餐', desc: '2汉堡+2薯条+2可乐', price: 88.00, category: 'set', image: 'family%20meal%20set' },
-            { id: 12, name: '儿童套餐', desc: '小汉堡+小薯条+果汁', price: 35.00, category: 'set', image: 'kids%20happy%20meal' }
+            { id: 1, name: '平淡打电话', desc: '仅仅是聊天', price: 5.00, category: 'CALL', image: 'delicious%20beef%20burger%20with%20lettuce' },
+            { id: 2, name: '甜蜜电话煲', desc: '甜甜蜜蜜，回味无穷', price: 52.00, category: 'CALL', image: 'cheese%20burger%20with%20melted%20cheese' },
+            { id: 3, name: '平淡打游戏', desc: '仅仅是玩游戏', price: 25.00, category: 'PLAY-GAME', image: 'crispy%20chicken%20leg%20burger' },
+            { id: 4, name: '甜蜜游戏', desc: '甜双开心，幸福快乐', price: 8.00, category: 'PLAY-GAME', image: 'cold%20cola%20drink%20in%20cup' },
+            { id: 5, name: '看一次电影', desc: '陪看电影', price: 8.00, category: 'MOVIE', image: 'sprite%20lemon%20lime%20soda' },
+            { id: 6, name: '逛街', desc: '一单一小时逛街', price: 15.00, category: 'SHOP', image: 'milk%20tea%20with%20pearls' },
+            { id: 7, name: '亲嘴一次', desc: '可以选择亲嘴方式', price: 12.00, category: 'KISS', image: 'golden%20crispy%20french%20fries' },
+            { id: 8, name: '陪睡', desc: '陪睡觉一晚', price: 18.00, category: 'SLEEP', image: 'crispy%20chicken%20nuggets' },
+            { id: 9, name: '夸夸', desc: '夸你一次', price: 18.00, category: 'GOOD', image: 'crispy%20chicken%20nuggets' },
+            { id: 10, name: '和好', desc: '和好一次', price: 45.00, category: 'HAPPY', image: 'fast%20food%20combo%20meal' },
+            { id: 11, name: '甜蜜套餐', desc: '甜蜜电话煲+甜蜜游戏', price: 88.00, category: 'set', image: 'family%20meal%20set' },
+            { id: 12, name: '全家福', desc: '甜蜜电话煲+甜蜜游戏+看一次电影+逛街+亲嘴一次+陪睡+夸夸', price: 35.00, category: 'set', image: 'kids%20happy%20meal' }
         ];
 
         // 购物车数据
@@ -582,7 +582,7 @@
                     <div class="empty-cart">
                         <span class="empty-icon">🛒</span>
                         <p>购物车是空的</p>
-                        <p style="font-size: 12px;">快去挑选美味吧</p>
+                        <p style="font-size: 12px;">快去挑选吧</p>
                     </div>
                 `;
                 cartFooter.style.display = 'none';

@@ -128,6 +128,16 @@
             border-radius: 12px;
             object-fit: cover;
         }
+        .hot-emoji {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+        }
         .hot-name { font-size: 14px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .hot-price { font-size: 16px; font-weight: bold; color: #ff6b6b; }
 
@@ -337,27 +347,27 @@
             </div>
             <div class="hot-scroll">
                 <div class="hot-item" onclick="scrollToMenu()">
-                    <img class="hot-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=cosmetics%20makeup%20beauty%20products&image_size=square" alt="">
+                    <div class="hot-emoji">💄</div>
                     <span class="hot-name">化妆品</span>
                     <span class="hot-price">¥52</span>
                 </div>
                 <div class="hot-item" onclick="scrollToMenu()">
-                    <img class="hot-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=movie%20cinema%20popcorn&image_size=square" alt="">
+                    <div class="hot-emoji" style="background: url('images/hand.jpg') center/cover;"></div>
                     <span class="hot-name">看电影</span>
                     <span class="hot-price">¥52</span>
                 </div>
                 <div class="hot-item" onclick="scrollToMenu()">
-                    <img class="hot-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=shopping%20street%20fashion&image_size=square" alt="">
+                    <div class="hot-emoji">🛍️</div>
                     <span class="hot-name">逛街</span>
                     <span class="hot-price">¥52</span>
                 </div>
                 <div class="hot-item" onclick="scrollToMenu()">
-                    <img class="hot-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=video%20gaming%20console&image_size=square" alt="">
+                    <div class="hot-emoji">🎮</div>
                     <span class="hot-name">打游戏</span>
                     <span class="hot-price">¥52</span>
                 </div>
                 <div class="hot-item" onclick="scrollToMenu()">
-                    <img class="hot-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=beautiful%20cake%20dessert&image_size=square" alt="">
+                    <div class="hot-emoji">🍰</div>
                     <span class="hot-name">小蛋糕</span>
                     <span class="hot-price">¥52</span>
                 </div>

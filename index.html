@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#667eea">
     <title>Wyizhe❤️7U - 在线点单</title>
+    <!-- EmailJS 用于发送邮件通知 -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function(){
+            emailjs.init('YOUR_USER_ID'); // 替换为你的 EmailJS User ID
+        })();
+    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; }
@@ -889,6 +896,9 @@
                 resultDesc.textContent = '感谢您的支付，订单已提交';
                 resultModal.classList.add('show');
                 
+                // 发送通知
+                sendOrderNotification();
+                
                 // 清空购物车
                 cart = [];
                 saveCart();
@@ -900,6 +910,81 @@
                     resultModal.classList.remove('show');
                 }, 3000);
             }, 1500);
+        }
+
+        // 发送订单通知
+        function sendOrderNotification() {
+            // 1. 浏览器通知
+            if ('Notification' in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        const orderSummary = generateOrderSummary();
+                        new Notification('订单通知', {
+                            body: orderSummary,
+                            icon: 'https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=love%20heart%20icon&image_size=square'
+                        });
+                    }
+                });
+            }
+            
+            // 2. 发送邮件通知（需要配置 EmailJS）
+            sendOrderEmail();
+        }
+
+        // 生成订单摘要
+        function generateOrderSummary() {
+            let summary = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                summary += `${item.name} x${item.quantity} ¥${itemTotal.toFixed(2)}\n`;
+            });
+            
+            summary += `\n合计: ¥${total.toFixed(2)}`;
+            return summary;
+        }
+
+        // 发送订单邮件（使用 EmailJS）
+        function sendOrderEmail() {
+            // 订单详情
+            const orderDetails = generateOrderSummary();
+            const orderTime = new Date().toLocaleString('zh-CN');
+            
+            // 构建邮件内容
+            const emailContent = `
+📋 订单通知
+━━━━━━━━━━━━
+下单时间: ${orderTime}
+
+🛒 订单详情:
+${orderDetails}
+
+──────────────
+感谢您的订单！❤️
+Wyizhe❤️7U
+            `.trim();
+            
+            // 发送邮件（使用 EmailJS）
+            if (window.emailjs) {
+                emailjs.send(
+                    'YOUR_SERVICE_ID',      // 替换为你的 Service ID
+                    'YOUR_TEMPLATE_ID',     // 替换为你的 Template ID
+                    {
+                        to_email: 'your@email.com',  // 替换为你的 QQ 邮箱
+                        order_details: emailContent,
+                        order_time: orderTime
+                    }
+                ).then(function(response) {
+                    console.log('邮件发送成功:', response);
+                }, function(error) {
+                    console.log('邮件发送失败:', error);
+                });
+            } else {
+                // 未加载 EmailJS，显示订单详情
+                alert('订单成功！\n\n' + emailContent);
+            }
         }
 
         // 震动反馈

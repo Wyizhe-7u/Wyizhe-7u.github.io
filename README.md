@@ -1,1 +1,1 @@
-# Wyizhe-7u.love.io
+# wyizhe-7u.github.io

@@ -712,11 +712,21 @@
         }
 
         // 添加到购物车
-        function addToCart(itemId) {
-            const item = menuItems.find(i => i.id === itemId);
-            if (!item) return;
+        function addToCart(itemOrId) {
+            let item;
+            
+            // 如果传入的是数字（itemId）
+            if (typeof itemOrId === 'number') {
+                item = menuItems.find(i => i.id === itemOrId);
+                if (!item) return;
+            } else if (typeof itemOrId === 'object' && itemOrId.id) {
+                // 如果传入的是完整的 item 对象
+                item = itemOrId;
+            } else {
+                return;
+            }
 
-            const existing = cart.find(c => c.id === itemId);
+            const existing = cart.find(c => c.id === item.id);
             if (existing) {
                 existing.quantity++;
             } else {

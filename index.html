@@ -52,14 +52,18 @@
 
         /* Banner */
         .banner {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%), url('images/hand.jpg');
+            background: url('images/hand.jpg');
             background-size: cover;
             background-position: center;
             border-radius: 20px;
-            padding: 30px;
+            padding: 60px 30px;
             color: white;
             text-align: center;
             margin-bottom: 20px;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         .banner h1 { font-size: 28px; margin-bottom: 10px; }
         .banner p { opacity: 0.9; margin-bottom: 20px; }

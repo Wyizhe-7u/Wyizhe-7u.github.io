@@ -687,7 +687,7 @@
                 const count = getCartCount(item.id);
                 return `
                     <div class="menu-item">
-                        <img class="menu-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt=${item.image}&image_size=square" alt="${item.name}">
+                        <img class="menu-image" src="${item.image}" alt="${item.name}">
                         <div class="menu-info">
                             <span class="menu-name">${item.name}</span>
                             <span class="menu-desc">${item.desc}</span>

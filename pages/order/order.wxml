@@ -1,0 +1,40 @@
+<view class="container">
+  <view class="header">
+    <text class="header-title">🍔 在线点单</text>
+    <text class="header-subtitle">选择您喜欢的美食</text>
+  </view>
+
+  <scroll-view scroll-x class="category-scroll">
+    <view class="category-list">
+      <view 
+        wx:for="{{categories}}" 
+        wx:key="id"
+        class="category-item {{currentCategory === item.id ? 'active' : ''}}"
+        bindtap="switchCategory"
+        data-id="{{item.id}}"
+      >
+        {{item.name}}
+      </view>
+    </view>
+  </scroll-view>
+
+  <scroll-view scroll-y class="menu-scroll">
+    <view class="menu-list">
+      <view wx:for="{{menuItems}}" wx:key="id" class="menu-item">
+        <image class="menu-image" src="https://a0ai.marscode.cn/api/ide/v1/text_to_image?prompt={{item.image}}&image_size=square" mode="aspectFill"></image>
+        <view class="menu-info">
+          <view class="menu-name">{{item.name}}</view>
+          <view class="menu-desc">{{item.description}}</view>
+          <view class="menu-bottom">
+            <text class="menu-price">¥{{item.price.toFixed(2)}}</text>
+            <view class="menu-actions">
+              <view class="action-btn minus" bindtap="decreaseItem" data-id="{{item.id}}">-</view>
+              <text class="action-count" wx:if="{{getCartCount(item.id) > 0}}">{{getCartCount(item.id)}}</text>
+              <view class="action-btn plus" bindtap="addToCart" data-id="{{item.id}}">+</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

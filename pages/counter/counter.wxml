@@ -1,0 +1,50 @@
+<view class="container">
+  <view class="card">
+    <view class="counter-display">
+      <view class="counter-label">当前数值</view>
+      <view class="counter-value">{{count}}</view>
+    </view>
+    
+    <view class="button-group">
+      <button class="btn-circle btn-decrease" bindtap="decrease">
+        <text class="btn-icon">-</text>
+      </button>
+      <button class="btn-circle btn-reset" bindtap="reset">
+        <text class="btn-icon">🔄</text>
+      </button>
+      <button class="btn-circle btn-increase" bindtap="increase">
+        <text class="btn-icon">+</text>
+      </button>
+    </view>
+    
+    <view class="stats">
+      <view class="stat-item">
+        <view class="stat-value">{{history.length}}</view>
+        <view class="stat-label">操作次数</view>
+      </view>
+      <view class="stat-item">
+        <view class="stat-value">{{maxValue}}</view>
+        <view class="stat-label">最大值</view>
+      </view>
+      <view class="stat-item">
+        <view class="stat-value">{{minValue}}</view>
+        <view class="stat-label">最小值</view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="card">
+    <view class="section-title">操作记录</view>
+    <scroll-view scroll-y class="history-list">
+      <view wx:for="{{history}}" wx:key="index" class="history-item">
+        <view class="history-time">{{item.time}}</view>
+        <view class="history-action" style="color: {{item.type === '+' ? '#667eea' : '#f56c6c'}}">
+          {{item.type}}{{item.value}}
+        </view>
+      </view>
+      <view wx:if="{{history.length === 0}}" class="empty-history">
+        暂无操作记录
+      </view>
+    </scroll-view>
+  </view>
+</view>
